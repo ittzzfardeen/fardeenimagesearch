@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>medicine search engine </title>
+    <link rel="stylesheet" href="3.css">
+   
+</head>
+<body>
+    
+    <h1> image search engine</h1>
+    <form id="search-form">
+        <input type="text" id="search-box" placeholder="image search by fardeen">
+        <button>search</button>
+    </form>
+  <div id="search-result"></div>
+  <button id="showmore-btn"> show more</button>
+  
+</body>
+
+
+<script>
+    const searchform=document.getElementById("search-form")
+const searchbox=document.getElementById("search-box")
+const searchresult=document.getElementById("search-result")
+const showmorebtn=document.getElementById("showmore-btn")
+const accesskey="kXJGCfg3APW5d07YniDAdf-nQ9eI8MpNZivpOKuumgk";
+
+let keyword=""
+let page=1
+
+async function searchimages(){
+    keyword=searchbox.value;
+    const url=`https://api.unsplash.com/search/photos?page=${page}&query=${keyword}&client_id=${accesskey}`
+    const response=await fetch(url)
+    const data=await response.json()
+   
+    const results= data.results;
+    if(page === 1)
+    {
+        searchresult.innerHTML=""
+    }
+    results.map((result)=>{
+        const image=document.createElement("img")
+        image.src=result.urls.small;
+        const imagelink=document.createElement("a")
+        imagelink.href=result.links.html;
+        imagelink.target="_blank";
+
+        imagelink.appendChild(image);
+        searchresult.appendChild(imagelink);
+
+
+    })
+    showmorebtn.style.display="block";
+
+}
+searchform.addEventListener("submit",(e)=>{
+    e.preventDefault();
+    page=1;
+    searchimages();
+});
+showmorebtn.addEventListener("click",()=>{
+    page++;
+    searchimages();
+})
+
+
+</script>
+
+</html>
